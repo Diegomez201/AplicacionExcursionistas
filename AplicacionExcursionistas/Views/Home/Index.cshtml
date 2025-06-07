@@ -1,0 +1,77 @@
+﻿@model AplicacionExcursionistas.Modelo.EscRiesgo
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Escalar Riesgo - Combinación Óptima</h2>
+
+    <form method="post" class="card p-4 shadow-sm">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Mínimo de Calorías:</label>
+                <input asp-for="CaloriasMinimas" type="number" class="form-control" required />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Peso Máximo:</label>
+                <input asp-for="PesoMaximo" type="number" class="form-control" required />
+            </div>
+        </div>
+
+        <h4 class="mt-4">Elementos</h4>
+        <div id="elementos">
+            @for (int i = 0; i < Model.Elementos.Count; i++)
+            {
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <input name="Elementos[@i].Nombre" class="form-control" placeholder="Nombre" required />
+                    </div>
+                    <div class="col-md-4">
+                        <input name="Elementos[@i].Peso" class="form-control" placeholder="Peso" type="number" required />
+                    </div>
+                    <div class="col-md-4">
+                        <input name="Elementos[@i].Calorias" class="form-control" placeholder="Calorías" type="number" required />
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="mb-3">
+            <button type="button" style="background-color:lightblue" class="btn btn-outline-primary" onclick="agregarElemento()">+ Agregar Elemento</button>
+        </div>
+
+        <div class="text-end">
+            <input type="submit" value="Buscar combinación óptima" style="background-color:lightgreen; color:black " class="btn btn-success" />
+        </div>
+    </form>
+
+    @if (ViewBag.Resultado != null)
+    {
+        <div class="mt-5">
+            <h3>Resultado:</h3>
+            <ul class="list-group">
+                @foreach (var e in ViewBag.Resultado as List<AplicacionExcursionistas.Modelo.Elemento>)
+                {
+                    <li class="list-group-item">@e.Nombre - Peso: @e.Peso, Calorías: @e.Calorias</li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+
+<script>
+    function agregarElemento() {
+        const index = document.querySelectorAll("#elementos .row").length;
+        const div = document.createElement("div");
+        div.className = "row mb-2";
+        div.innerHTML = `
+                <div class="col-md-4">
+                    <input name="Elementos[${index}].Nombre" class="form-control" placeholder="Nombre" required />
+                </div>
+                <div class="col-md-4">
+                    <input name="Elementos[${index}].Peso" class="form-control" placeholder="Peso" type="number" required />
+                </div>
+                <div class="col-md-4">
+                    <input name="Elementos[${index}].Calorias" class="form-control" placeholder="Calorías" type="number" required />
+                </div>
+            `;
+        document.getElementById("elementos").appendChild(div);
+    }
+</script>
